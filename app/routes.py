@@ -1,7 +1,10 @@
 from app import app
-from flask import render_template,flash,redirect,url_for
+from flask import render_template,flash,redirect,url_for,request
 from app.forms import LoginForm
+import models
+import json
 
+method = models.wx_method()
 @app.route('/')
 @app.route('/index')
 def index():
@@ -31,3 +34,15 @@ def login():
         return redirect(url_for('index'))
     #首次登录/数据格式错误都会是在登录界面
     return render_template('login.html',title='登录',form=form)
+
+@app.route('/query',methods=['GET','POST'])
+def query():
+    if len(method.wx_dict)==0:
+        method.init_data()
+    xing = request.values['xing']
+    sex = request.values['sex']
+    date = request.values['date']
+    time = request.values['time']
+    doublename = request.values['doublename']
+    ret = method.get_two(date,time,xing,sex,50)
+    return  json.dumps(ret,ensure_ascii=False)

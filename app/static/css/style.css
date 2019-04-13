@@ -259,6 +259,7 @@ ul.pagination li a{color: #444;}
 .widget.wid-tweet .tweet-item{border-bottom: 1px solid #ddd;padding: 5px;}
 .widget.wid-tweet .tweet-item:last-child{border-bottom: none; padding: 5px 0 0;}
 
+
 .widget.wid-tags{}
 .widget.wid-tags a{color: #333; border: 1px solid #333; padding: 1px 10px;line-height: 2.2;font-size: 14px;text-transform: capitalize;}
 .widget.wid-tags a:hover{color: #7DC314; border: 1px solid #999;}
