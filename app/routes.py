@@ -3,8 +3,8 @@ from flask import render_template,flash,redirect,url_for,request
 from app.forms import LoginForm
 import models
 import json
+import time
 
-method = models.wx_method()
 @app.route('/')
 @app.route('/index')
 def index():
@@ -37,12 +37,38 @@ def login():
 
 @app.route('/query',methods=['GET','POST'])
 def query():
-    if len(method.wx_dict)==0:
-        method.init_data()
+    if len(models.wx_dict)==0:
+        models.init_data()
+    tonglei = request.values['tonglei']
+    rigan_wx = request.values['rigan_wx']
+    is_weak = request.values['is_weak']
+    minTong = request.values['minTong']
+    minYi = request.values['minYi']
+    bazi = request.values['bazi']
     xing = request.values['xing']
-    sex = request.values['sex']
+    ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,50)
+    return  json.dumps(ret,ensure_ascii=False)
+
+
+@app.route('/analyse_bazi',methods=['GET','POST'])
+def analyse_bazi():
+    if len(models.wx_dict)==0:
+        models.init_data()
     date = request.values['date']
-    time = request.values['time']
-    doublename = request.values['doublename']
-    ret = method.get_two(date,time,xing,sex,50)
+    birthdaytime = request.values['time']
+    birthdayStr = date + ' '+ birthdaytime
+    birthday=time.strptime(birthdayStr,'%Y-%m-%d %H:%M:%S');
+    ret = models.get_bazi_from_date(birthday.tm_year,birthday.tm_mon,birthday.tm_mday,birthday.tm_hour,birthday.tm_min)
+    return  json.dumps(ret,ensure_ascii=False)
+
+
+@app.route('/analyse_mingzi',methods=['GET','POST'])
+def analyse_mingzi():
+    if len(models.wx_dict)==0:
+        models.init_data()
+    date = request.values['date']
+    birthdaytime = request.values['time']
+    birthdayStr = date + ' '+ birthdaytime
+    birthday=time.strptime(birthdayStr,'%Y-%m-%d %H:%M:%S');
+    ret = models.get_bazi_from_date(birthday.tm_year,birthday.tm_mon,birthday.tm_mday,birthday.tm_hour,birthday.tm_min)
     return  json.dumps(ret,ensure_ascii=False)
