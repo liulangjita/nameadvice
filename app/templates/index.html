@@ -163,10 +163,15 @@
 			<div id="main-content"><!-- background not working -->
 				<div class="col-md-6">
 					<div class="box">
-						<div class="box-header header-natural">
-							<h2>参考结果</h2>
-						</div>
-						<div id="result" class="box-content">
+						<div class="widget wid-vid">
+							<div class="heading">
+								<h4>参考结果</h4>
+							</div>
+							<div id="result" class="box-content">
+							</div>
+							<div class="heading"><h4>生辰解析</h4></div>
+							<div id="shengchen" class="box-content">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -174,48 +179,57 @@
 			<div id="sidebar">
 				<div class="col-md-3">
 					<!---- Start Widget ---->
-					<div class="widget wid-vid">
-						<div class="heading">
-							<h4>名字测评</h4>
-						</div>
-						<div style="display:inline">
-							<input type="text" placeholder="全名" id="mingzi" />
-							<button class="btn btn-primary" id="test" onclick="query()">分析测评</button>
-						</div>
-					</div>
 					<div class="box">
-						<div class="box-header header-vimeo">
-							<h2>八字解析</h2>
-						</div>
-						<div class="box-content">
-						</div>
-					</div>
-					<div class="box">
-						<div class="box-header header-photo">
-							<h2>五格解析</h2>
-						</div>
-						<div class="box-content">
+						<div class="widget wid-vid">
+							<div class="heading">
+								<h4>名字测评</h4>
+							</div>
+							<div  class="box-content">
+							<div style="display:inline">
+								<input type="text" placeholder="姓" id="xingshi" />
+								<input type="text" placeholder="名" id="mingzi" />
+								<button class="btn btn-primary" id="test" onclick="query()">分析测评</button>
+							</div>
+							</div>
+							<div class="heading"><h4>八字解析</h4></div>
+							<div  class="box-content">
+								<div id="baziresult">
+								</div>
+							</div>
+							<div class="heading"><h4>五格解析</h4></div>
+							<div  class="box-content">
+								<div id="wugeresult">
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-3">
-					<!---- Start Widget ---->
-					<div class="widget wid-tags">
-						<div class="heading"><h4>公历查八字</h4></div>
-						<div class="content">
+					<div class="box">
+					<div class="widget wid-vid">
+						<!--<div class="heading"><h4>公历转农历</h4></div>
+						<div class="box-content">
+							<div class="content">
+								<span><input type="text" placeholder="选择出生日期" value="" name="date" id="birthday2" class="form-control"></span>
+								<div>
+									<button class="btn btn-primary" id="querynongli" onclick="querynongli()">查 询</button>
+								</div>
+							</div>
+							<div id="nongli">
+							</div>
+						</div>
+						-->
+						<div class="heading"><h4>生辰查八字</h4></div>
+						<div class="box-content">
+								<span><input type="text" placeholder="选择出生日期" value="" name="date" id="birthday1" class="form-control"></span>
+								<span><input type="text" placeholder="选择出生时间" value="" name="time" id="birthday1Time" class="form-control"></span>
+								<div>
+									<button class="btn btn-primary" id="querybazi" onclick="querybazi()">查 询</button>
+								</div>
+							<div id="bazi">
+							</div>
 						</div>
 					</div>
-					<!---- Start Widget ---->
-					<div class="widget wid-calendar">
-						<div class="heading"><h4>公历转农历</h4></div>
-						<div class="content">
-							<center><form action="" role="form">
-								<div class="">
-									<div class="input-group date form_date" data-date="" data-date-format="dd MM yyyy" data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">                </div>
-									<input type="hidden" id="dtp_input2" value="" /><br/>
-								</div>
-							</form></center>
-						</div>
 					</div>
 				</div>
 			</div>
@@ -227,7 +241,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-8 col-footer footer-1">
-						<div class="footer-heading"><h1><span style="color: #fff;">鸣谢</span></h1></div>
+						<div class="footer-heading"><h1><span style="color: #000;">鸣谢</span></h1></div>
 						<div class="content">
 							<p><strong>瑾将此网站献给即将出生的女儿（儿子）！</strong></p>
 							<p><strong>感谢妻子十月怀胎艰辛！</strong></p>
@@ -294,28 +308,87 @@
 	  elem: '#birthdayTime'
 	  ,type: 'time'
 	});
+	laydate.render({
+	  elem: '#birthday1' //指定元素
+	});
+	laydate.render({
+	  elem: '#birthday1Time'
+	  ,type: 'time'
+	});
+	laydate.render({
+	  elem: '#birthday2' //指定元素
+	});
+
+	function querybazi(){
+        date = document.getElementById("birthday1").value
+        time = document.getElementById("birthday1Time").value
+        $.post("{{ url_for('analyse_bazi') }}",
+			{
+                'date':date,'time':time,
+            },
+            function(data,status){
+				$('#bazi').html(data);
+			}
+		)
+	}
+
+	function querynongli(){
+        date = document.getElementById("birthday1").value
+	}
+
     function query(){
         xing = document.getElementById("xing").value
         sex = $("input[name='optradio']:checked").val();
         date = document.getElementById("birthday").value
         time = document.getElementById("birthdayTime").value
         doublename = $('#doublename  option:selected').val()
-        $.post("{{ url_for('query') }}",
+
+        $.post("{{ url_for('analyse_bazi') }}",
 		{
-                    'xing':xing,'sex':sex,'date':date,'time':time,'doublename':doublename
+                    'date':date,'time':time,
                 },
 			function(data,status){
 
 			var itemHtml="";
-			listName = eval("("+data+")");
-			for(var i=0,len=listName.length;i<len;i++){
-			　　itemHtml+='<a href="#result" onclick="analyse(this)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
-			}
-			$('#result').html(itemHtml);
+			$('#shengchen').html(data);
+			$('#baziresult').html(data);
+			bazi_result = eval("("+data+")");
+			tonglei = bazi_result['tongle']
+			rigan_wx = bazi_result['rigan']
+			is_weak = bazi_result['isweak']?1:0
+			minTong = bazi_result['minTong']
+			minYi = bazi_result['minYi']
+			bazi = bazi_result['shengchenbazi']
+
+			$.post("{{ url_for('query') }}",
+			{
+						'tonglei':tonglei,'rigan_wx':rigan_wx,'is_weak':is_weak,'minTong':minTong,'minYi':minYi,'bazi':bazi,'xing':xing,'sex':sex					},
+				function(data,status){
+
+				var itemHtml="";
+				listName = eval("("+data+")");
+				for(var i=0,len=listName.length;i<len;i++){
+				　　itemHtml+='<a href="#result" onclick="analyse(xing,this)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
+				}
+				$('#result').html(itemHtml);
+			});
 		});
     }
-    function analyse(obj){
-    	$('#mingzi').attr("value",obj.innerHTML)
+    function analyse(xing,obj){
+    	mingzi = ""
+    	quanming = obj.innerHTML
+    	if(xing.length==2)
+    		mingzi = quanming.substring(2)
+    	else
+    		mingzi = quanming.substring(1)
+    	$('#mingzi').attr("value",mingzi)
+    	$('#xingshi').attr("value",xing)
+    	$.post("{{ url_for('analyse_mingzi') }}",
+			{
+				'xing':xing,'ming':mingzi},
+				function(data,status){
+				$('#wugeresult').html(data);
+			});
     }
 </script>
 </body>

@@ -131,6 +131,11 @@ def init_data():
         if len(line)==2:
             womand_arr.append(line)
 
+def get_sizhu_from_date(year,month,day,hour,minute):
+    dll = ctypes.windll.LoadLibrary('data/valuatedll.dll')
+    sizhu_result = dll.GetSiZhuFromDate(year, month, day, hour, minute)
+    return sizhu_result
+
 def get_bazi_from_date(year,month,day,hour,minute):
     analyse_result = {}
     wuxingscore = [0.0,0.0,0.0,0.0,0.0]
@@ -139,7 +144,6 @@ def get_bazi_from_date(year,month,day,hour,minute):
     isweak = True
     minTong = ""
     minYi = ""
-    tonglelist = []
     yileilist = []
     analyse_result['wuxingscore']= wuxingscore
     analyse_result['shengchenbazi']= shengchenbazi
@@ -148,7 +152,6 @@ def get_bazi_from_date(year,month,day,hour,minute):
     analyse_result['minTong']= minTong
     analyse_result['minYi']= minYi
     analyse_result['yileilist']= yileilist
-    analyse_result['tonglelist']= tonglelist
     dll = ctypes.windll.LoadLibrary('data/valuatedll.dll')
     test_result = dll.GetScoreFromDate(year,month,day,hour,minute)
 
@@ -171,32 +174,33 @@ def get_bazi_from_date(year,month,day,hour,minute):
     tonglei=GenerationSourceTable[rigan_wx]
     analyse_result['rigan'] = WuXingTable[rigan_wx]
     tonglei_score=wx_score_lei[rigan_wx]+wx_score_lei[tonglei]
-    analyse_result['tonglelist'].clear()
+    analyse_result['tongle']=WuXingTable[tonglei]
     analyse_result['yileilist'].clear()
     for indexwuxing in range(5):
-        if indexwuxing==rigan_wx or indexwuxing==tonglei:
-            analyse_result['tonglelist'].append(WuXingTable[indexwuxing])
-        else:
+        if indexwuxing!=rigan_wx and indexwuxing!=tonglei:
             analyse_result['yileilist'].append(WuXingTable[indexwuxing])
     yilei_score=wx_score_lei[0]+wx_score_lei[1]+wx_score_lei[2]+wx_score_lei[3]+wx_score_lei[4]-tonglei_score
     is_weak=True
     if tonglei_score>yilei_score:
         is_weak=False
-    minTong = min(wx_score_lei[tonglei],wx_score_lei[rigan_wx])
-    analyse_result['minTong']= minTong
+    minTongScore = min(wx_score_lei[tonglei],wx_score_lei[rigan_wx])
     tempRi = wx_score_lei_temp[rigan_wx]
     analyse_result['rigan'] = WuXingTable[rigan_wx]
     analyse_result['isweak'] = is_weak
     tempTong = wx_score_lei_temp[tonglei]
     wx_score_lei_temp.remove(tempRi)
     wx_score_lei_temp.remove(tempTong)
-    minYi = min(wx_score_lei_temp)
-    analyse_result['minYi']= minYi
+    minYiScore = min(wx_score_lei_temp)
+    for indexwuxing in range(5):
+        if minTongScore == wx_score_lei[indexwuxing]:
+            analyse_result['minTong'] = WuXingTable[indexwuxing]
+        if minYiScore == wx_score_lei[indexwuxing]:
+            analyse_result['minYi'] = WuXingTable[indexwuxing]
     return analyse_result
 
 
 
-def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,first='',sec=''):
+def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first='',sec=''):
     score =[0,0,0,0,0]
     for j in range(0,8):
        if j%2==0:
@@ -215,19 +219,19 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,
             score[i]=2
         else:
             score[i]=3
-        if WuXingTable[i]==tonglei or WuXingTable[i]==rigan_wx:
-            if is_weak:
+        if WuXingTable[i] == tonglei or WuXingTable[i]==rigan_wx:
+            if is_weak=='1':
                 score[i]=score[i]-3
                 if WuXingTable[i]==minTong:
                     score[i]=score[i]-1
-                if i==rigan_wx:
+                if WuXingTable[i]==rigan_wx:
                     score[i]=score[i]-1
         else:
-            if not is_weak:
+            if is_weak == '0':
                 score[i]=score[i]-3
                 if WuXingTable[i]==minYi:
                     score[i]=score[i]-1
-                if i==rigan_wx:
+                if WuXingTable[i]==rigan_wx:
                     score[i]=score[i]-1
     name_score = []
     good_500 = []
@@ -314,12 +318,18 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,
 def analyse_mingzi(xing,ming):
     mingzi = xing+ming
     lenMingzi = len(mingzi)
+    lenMing = len(ming)
     wuxing = []
+    xingbh = bh_dict.get(xing[0], 0)
+    mingbh = []
     for i in range(lenMingzi):
         if wx_dict.__contains__(mingzi[i]):
             wuxing.append(wx_dict[mingzi[i]])
         else:
             wuxing.append('n')
+
+    for i in range(lenMing):
+        mingbh.append(bh_dict.get(ming[i], 0))
     tian = bh_dict.get(xing[0], 10) + 1
     ren = bh_dict.get(xing[0], 10) + bh_dict.get(ming[0], 10)
     if (len(ming) == 2):
@@ -367,6 +377,8 @@ def analyse_mingzi(xing,ming):
     wugezong = bh_wg_dict.get(zong)
     result = {}
     result["wuxing"]=wuxing
+    result["xingbh"]=xingbh
+    result["mingbh"]=mingbh
     result["tian"]=tian #笔画
     result["ren"]=ren
     result["di"]=di
@@ -506,8 +518,13 @@ def get_result(num,names):
 
     return  result
 
-def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,num,first='',sec=''):
-    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,xing,first='',sec='')
+def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,xing,num,sex,first='',sec=''):
+    type = 1
+    if sex=='1':
+        type = 1
+    elif sex=='2':
+        type = 2
+    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first='',sec='')
     names = cuputer_score(xing,names500)
     return  get_result(num,names)
 
