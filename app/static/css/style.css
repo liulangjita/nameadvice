@@ -43,6 +43,7 @@ a:focus {text-decoration: none;color: #000;}
 .f-left{float: left;}
 .t-right{text-align: right;}
 .t-left{text-align: left;}
+.rightbutton {float:right;margin-right:10%}
 
 .post{}
 .post:after, .post:before, article:after, article:before, section:after, section:before{clear: both; content: '\0020'; display: block; visibility: hidden; width: 0; height: 0;}
@@ -86,7 +87,7 @@ body.sub-page .logo {margin: 110px 0 80px;background: url(../images/bg.jpg) fixe
 #menu ul.nav .dropdown-menu li a:hover{color: #000;background-color: #fff;}
 #menu .dropdown-inner {display: table;}
 #menu .dropdown-inner ul {display: table-cell;}
-#menu .dropdown-inner a {min-width: 160px;display: block;padding: 3px 20px;clear: both;line-height: 20px;color: #000;font-size: 14px;margin: 0 5px;}
+#menu .dropdown-inner a {min-width: 80px;display: block;padding: 3px 20px;clear: both;line-height: 20px;color: #000;font-size: 14px;margin: 0 5px;}
 #menu li.dropdown:hover>a, #menu li.dropdown:focus>a, #menu li.dropdown:active>a{background: #fff;color: #000;}
 
 #menu ul.nav li a{font-weight: bold;color: #000;border-radius: 5px;padding: 14px 19px;}
@@ -186,6 +187,8 @@ header{}
 .box .box-content span{font-size: 15px;}
 .box .box-content span i{font-size: 14px;margin-right: 2px;}
 .box .box-content p{margin-top: 10px;}
+
+.block{margin-top: 20px;}
 
 /* ---Vid-Effect--- */
 .wrap-vid{}
@@ -332,7 +335,6 @@ footer .footer-3 ul li a:hover{color: #666;}
 #contact_form {padding:25px;}
 
 #ff label {cursor:pointer;margin:px 0;display:block;font-weight:bold;}
-#ff input {display:block;width:100%;color:#000;padding:10px;margin: 5px 0 25px 0;}
 #ff textarea {display:block;width:100%;height:200px;background-color:#fff; color:#000;padding:10px;margin: 5px 0 25px 0;}
 
 #ff .sendButton {border: none;cursor:pointer;background-color: #FD0005;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;;width:100px;color:#ffffff;}

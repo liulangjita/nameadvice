@@ -324,9 +324,18 @@ def analyse_mingzi(xing,ming):
     mingbh = []
     for i in range(lenMingzi):
         if wx_dict.__contains__(mingzi[i]):
-            wuxing.append(wx_dict[mingzi[i]])
+            if wx_dict[mingzi[i]] == 'j':
+                wuxing.append('金')
+            elif wx_dict[mingzi[i]] == 'm':
+                wuxing.append('木')
+            elif wx_dict[mingzi[i]] == 's':
+                wuxing.append('水')
+            elif wx_dict[mingzi[i]] == 'h':
+                wuxing.append('火')
+            elif wx_dict[mingzi[i]] == 't':
+                wuxing.append('土')
         else:
-            wuxing.append('n')
+            wuxing.append('无')
 
     for i in range(lenMing):
         mingbh.append(bh_dict.get(ming[i], 0))
@@ -373,7 +382,8 @@ def analyse_mingzi(xing,ming):
         sancai = sancai + 's'
     sancaiScore = sancai_score.get(sancai, 10)
     wugedi = bh_wg_dict.get(di)
-    wugetian = bh_wg_dict.get(ren)
+    wugetian = bh_wg_dict.get(tian)
+    wugeren = bh_wg_dict.get(ren)
     wugezong = bh_wg_dict.get(zong)
     result = {}
     result["wuxing"]=wuxing
@@ -384,7 +394,7 @@ def analyse_mingzi(xing,ming):
     result["di"]=di
     result["zong"]=zong
     result["sancaiScore"]=sancaiScore
-    result["wuge"]=wugedi+wugetian+wugezong
+    result["wuge"]=wugedi+wugetian+wugezong+wugeren
     return result
 
 def cuputer_score(xing,good_500):

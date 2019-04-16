@@ -111,9 +111,9 @@
 							<!-- Static Header -->
 							<div class="header-text hidden-xs">
 								<div class="col-md-12 text-center">
-									<h2>五格命理</h2>
+									<h2>三才五格</h2>
 									<br>
-									<h3>精准测算</h3>
+									<h3>辅助选名</h3>
 									<br>
 								</div>
 							</div> <!--/header-text -->
@@ -130,27 +130,36 @@
 			</div>
 			<div class="col-sm-4" >
 				<div class="query">
-					<div>
-						<label class="form-inline">请输入姓氏：<input type="text" class="form-control" id="xing" /></label>
+					<div class="form-inline">
+						<label style="width: 45%;">请输入姓氏：</label>
+						<input style="width: 45%;" placeholder="必填" type="text" id="xing" />
 					</div>
-					<span><input type="text" placeholder="选择出生日期" value="" name="date" id="birthday" class="form-control"></span>
-					<span><input type="text" placeholder="选择出生时间" value="" name="time" id="birthdayTime" class="form-control"></span>
-					<div class="radio-inline">
-					  <label><input type="radio" name="optradio" value=1 checked>男 孩 </label>
+					<div class="block form-inline">
+					<span><input type="text" placeholder="选择出生日期" style="width: 45%;" value="" name="date" id="birthday" class="form-control"></span>
+					<span><input type="text" placeholder="选择出生时间" style="width: 45%;" value="" name="time" id="birthdayTime" class="form-control"></span>
 					</div>
-					<div class="radio-inline">
-					  <label><input type="radio" name="optradio" value=2>女 孩 </label>
-					</div>
-					<div>
-						<label class="form-inline">请选择单/双字名：
-						<select name="type" id="doublename" class="form-control" style="width: auto;">
+					<div class="block">
+						<label style="width: 45%;">请选择单/双字名：</label>
+						<select name="type" id="doublename"  style="width: 45%;">
 						<option value="2">双字名</option>
 						<option value="1">单字名</option>
 						</select>
-						</label>
 					</div>
-					<div>
-						<button class="btn btn-primary" id="query" onclick="query()">查 询</button>
+					<div class="block form-inline">
+							<label style="width: 30%;"><input type="radio" name="zhidingziradio" value=1 checked>指定第一个字</label>
+							<label style="width: 30%;"><input type="radio" name="zhidingziradio" value=2 >指定第二个字</label>
+							<input style="width: 30%;" placeholder="选填" type="text" id="zhidingzi" />
+					</div>
+					<div class="block">
+						<div class="radio-inline ">
+						  <label><input type="radio" name="optradio" value=1 checked>男 孩 </label>
+						</div>
+						<div class="radio-inline">
+						  <label><input type="radio" name="optradio" value=2>女 孩 </label>
+						</div>
+					</div>
+					<div class="block">
+						<button class="btn btn-primary"  id="query" onclick="query()">   查 询   </button>
 					</div>
 				</div>
 			</div>
@@ -184,19 +193,20 @@
 							<div class="heading">
 								<h4>名字测评</h4>
 							</div>
-							<div  class="box-content">
-							<div style="display:inline">
-								<input type="text" placeholder="姓" id="xingshi" />
-								<input type="text" placeholder="名" id="mingzi" />
-								<button class="btn btn-primary" id="test" onclick="query()">分析测评</button>
-							</div>
-							</div>
-							<div class="heading"><h4>八字解析</h4></div>
-							<div  class="box-content">
-								<div id="baziresult">
+							<div  class="box-content ">
+								<div class="form-inline">
+									<input type="text"  style="width: 30%;" placeholder="姓" id="xingshi" />
+									<input type="text"  style="width: 60%;" placeholder="名" id="mingzi" />
+								</div>
+								<div class="block">
+									<span><input type="text" placeholder="选择出生日期" value=""  name="date" id="birthday3" class="form-control"></span>
+									<span><input type="text" placeholder="选择出生时间" value=""  name="time" id="birthday3Time" class="form-control"></span>
+								</div>
+								<div class="block">
+									<button class="btn btn-primary" id="test" onclick="analyzemingzi()">分析测评</button>
 								</div>
 							</div>
-							<div class="heading"><h4>五格解析</h4></div>
+							<div class="heading"><h4>名字分析</h4></div>
 							<div  class="box-content">
 								<div id="wugeresult">
 								</div>
@@ -207,29 +217,48 @@
 				<div class="col-md-3">
 					<div class="box">
 					<div class="widget wid-vid">
-						<!--<div class="heading"><h4>公历转农历</h4></div>
+						<div class="heading"><h4>自定义五行</h4></div>
 						<div class="box-content">
-							<div class="content">
-								<span><input type="text" placeholder="选择出生日期" value="" name="date" id="birthday2" class="form-control"></span>
-								<div>
-									<button class="btn btn-primary" id="querynongli" onclick="querynongli()">查 询</button>
+							<div><input style="width: 45%;" placeholder="姓氏" type="text" id="xingcustom" /></div>
+								<div class="block">
+								<span><input type="text" placeholder="选择出生日期" value=""  name="date" id="birthdaycustom" class="form-control"></span>
+								<span><input type="text" placeholder="选择出生时间" value="" name="time" id="birthdaycustomTime" class="form-control"></span>
+								</div>
+							<div class="block form-inline">
+							<select name="type" id="firstwuxing"  style="width: 30%;">
+								<option value="1">金</option>
+								<option value="2">木</option>
+								<option value="3">水</option>
+								<option value="4">火</option>
+								<option value="5">土</option>
+							</select>
+							<select name="type" id="secondwuxing"  style="width: 30%;">
+								<option value="1">金</option>
+								<option value="2">木</option>
+								<option value="3">水</option>
+								<option value="4">火</option>
+								<option value="5">土</option>
+							</select>
+							</div>
+							<div class="block">
+								<select name="type" id="doublenamecustom"  style="width: 45%;">
+								<option value="2">双字名</option>
+								<option value="1">单字名</option>
+								</select>
+							</div>
+							<div class="block">
+								<div class="radio-inline ">
+								  <label><input type="radio" name="optradio" value=1 checked>男 孩 </label>
+								</div>
+								<div class="radio-inline">
+								  <label><input type="radio" name="optradio" value=2>女 孩 </label>
 								</div>
 							</div>
-							<div id="nongli">
-							</div>
-						</div>
-						-->
-						<div class="heading"><h4>生辰查八字</h4></div>
-						<div class="box-content">
-								<span><input type="text" placeholder="选择出生日期" value="" name="date" id="birthday1" class="form-control"></span>
-								<span><input type="text" placeholder="选择出生时间" value="" name="time" id="birthday1Time" class="form-control"></span>
-								<div>
-									<button class="btn btn-primary" id="querybazi" onclick="querybazi()">查 询</button>
+								<div class="block">
+									<button class="btn btn-primary" id="querybazi" onclick="querycustom()">查 询</button>
 								</div>
-							<div id="bazi">
 							</div>
 						</div>
-					</div>
 					</div>
 				</div>
 			</div>
@@ -245,7 +274,7 @@
 						<div class="content">
 							<p><strong>瑾将此网站献给即将出生的女儿（儿子）！</strong></p>
 							<p><strong>感谢妻子十月怀胎艰辛！</strong></p>
-							<p><strong>感谢父母的辛苦照顾！</strong></p>
+							<p><strong>感谢父母的辛苦操劳！</strong></p>
 						</div>
 					</div>
 					<div class="col-sm-4 col-footer footer-2">
@@ -318,6 +347,13 @@
 	laydate.render({
 	  elem: '#birthday2' //指定元素
 	});
+	laydate.render({
+	  elem: '#birthday3Time'
+	  ,type: 'time'
+	});
+	laydate.render({
+	  elem: '#birthday3' //指定元素
+	});
 
 	function querybazi(){
         date = document.getElementById("birthday1").value
@@ -327,7 +363,8 @@
                 'date':date,'time':time,
             },
             function(data,status){
-				$('#bazi').html(data);
+				result = eval("("+data+")");
+				$('#bazi').html("八字："+result["shengchenbazi"]);
 			}
 		)
 	}
@@ -335,6 +372,80 @@
 	function querynongli(){
         date = document.getElementById("birthday1").value
 	}
+
+
+    function resolve_bazi(data){
+		bazi_result = eval("("+data+")");
+		wuxingscore = bazi_result['wuxingscore']
+		tonglei = bazi_result['tongle']
+		rigan_wx = bazi_result['rigan']
+		is_weak = bazi_result['isweak']?1:0
+		minTong = bazi_result['minTong']
+		minYi = bazi_result['minYi']
+		bazi = bazi_result['shengchenbazi']
+		yileilist = bazi_result['yileilist']
+
+		var shengchenHtml="";
+		shengchenHtml += '五行强度：<br/>'
+		shengchenHtml += '金：'+wuxingscore[0]+'<br/>'
+		shengchenHtml += '木：'+wuxingscore[1]+'<br/>'
+		shengchenHtml += '水：'+wuxingscore[2]+'<br/>'
+		shengchenHtml += '火：'+wuxingscore[3]+'<br/>'
+		shengchenHtml += '土：'+wuxingscore[4]+'<br/>'
+		shengchenHtml += '八字：'+bazi +'<br/>'
+		if(is_weak){
+			shengchenHtml += '日干为'+rigan_wx+',八字偏弱<br/>'
+			shengchenHtml += '喜用神：'+tonglei+','+rigan_wx +'<br/>'
+		}
+		else{
+			shengchenHtml += '八字偏强<br/>'
+			shengchenHtml += '喜用神：'+yileilist[0]+','+yileilist[1]+','+yileilist[2]+',' +'<br/>'
+		}
+		$('#shengchen').html(shengchenHtml);
+    }
+    function resolve_wuge(data,xing,mingzi){
+		var wugeHtml="";
+		wuge_result = eval("("+data+")");
+		wuxing = wuge_result['wuxing'];
+		xingbh = wuge_result['xingbh'];
+		mingbh = wuge_result['mingbh'];
+		tian = wuge_result['tian'];
+		ren = wuge_result['ren'];
+		di = wuge_result['di'];
+		zong = wuge_result['zong'];
+		sancaiScore = wuge_result['sancaiScore'];
+		wuge = wuge_result['wuge'];
+		wugeHtml += '姓名五行：<br/>';
+		if(xing.length==2){
+			wugeHtml += xing[0]+'：'+wuxing[0]+'<br/>';
+			wugeHtml += xing[1]+'：'+wuxing[1]+'<br/>';
+		}
+		else
+			wugeHtml += xing[0]+'：'+wuxing[0]+'<br/>'
+		if(mingzi.length==2){
+			wugeHtml += mingzi[0]+'：'+wuxing[xing.length]+'<br/>'
+			wugeHtml += mingzi[1]+'：'+wuxing[xing.length+1]+'<br/>'
+		}
+		else
+			wugeHtml += mingzi[0]+'：'+wuxing[xing.length-1]+'<br/>'
+		wugeHtml += '姓名笔画（康熙字典）：<br/>'
+			wugeHtml += xing[0]+'：'+xingbh+'  (复姓取第一个字)<br/>'
+		if(mingzi.length==2){
+			wugeHtml += mingzi[0]+'：'+mingbh[0]+'<br/>'
+			wugeHtml += mingzi[1]+'：'+mingbh[1]+'<br/>'
+		}
+		else
+			wugeHtml += mingzi[0]+'：'+mingbh[0]+'<br/>'
+
+		wugeHtml += '天格：'+tian+'<br/>'
+		wugeHtml += '地格：'+di+'<br/>'
+		wugeHtml += '人格：'+ren+'<br/>'
+		wugeHtml += '总格：'+zong+'<br/>'
+		wugeHtml += '三才分数：'+sancaiScore+'<br/>'
+		wugeHtml += '五格分数：'+wuge+'  <br/>'
+
+		$('#wugeresult').html(wugeHtml);
+    }
 
     function query(){
         xing = document.getElementById("xing").value
@@ -348,17 +459,7 @@
                     'date':date,'time':time,
                 },
 			function(data,status){
-
-			var itemHtml="";
-			$('#shengchen').html(data);
-			$('#baziresult').html(data);
-			bazi_result = eval("("+data+")");
-			tonglei = bazi_result['tongle']
-			rigan_wx = bazi_result['rigan']
-			is_weak = bazi_result['isweak']?1:0
-			minTong = bazi_result['minTong']
-			minYi = bazi_result['minYi']
-			bazi = bazi_result['shengchenbazi']
+            	resolve_bazi(data)
 
 			$.post("{{ url_for('query') }}",
 			{
@@ -368,7 +469,7 @@
 				var itemHtml="";
 				listName = eval("("+data+")");
 				for(var i=0,len=listName.length;i<len;i++){
-				　　itemHtml+='<a href="#result" onclick="analyse(xing,this)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
+				　　itemHtml+='<a href="#result" onclick="analyse(xing,this,date,time)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
 				}
 				$('#result').html(itemHtml);
 			});
@@ -381,14 +482,38 @@
     		mingzi = quanming.substring(2)
     	else
     		mingzi = quanming.substring(1)
-    	$('#mingzi').attr("value",mingzi)
+    	$('#mingzi').val(mingzi)
     	$('#xingshi').attr("value",xing)
     	$.post("{{ url_for('analyse_mingzi') }}",
 			{
-				'xing':xing,'ming':mingzi},
-				function(data,status){
-				$('#wugeresult').html(data);
+				'xing':xing,'ming':mingzi
+			},
+			function(data,status){
+				resolve_wuge(data,xing,mingzi);
 			});
+    }
+
+    function analyzemingzi(){
+        xing = $("#xingshi").val()
+        ming = $("#mingzi").val()
+        date = document.getElementById("birthday3").value
+        time = document.getElementById("birthday3Time").value
+    	$.post("{{ url_for('analyse_mingzi') }}",
+			{
+				'xing':xing,'ming':ming
+			},
+			function(data,status){
+				resolve_wuge(data,xing,ming);
+			}
+		);
+        $.post("{{ url_for('analyse_bazi') }}",
+			{
+                'date':date,'time':time,
+            },
+            function(data,status){
+            	resolve_bazi(data)
+			}
+		);
     }
 </script>
 </body>
