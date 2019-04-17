@@ -16,6 +16,8 @@ man_arr = []
 woman_arr = []
 
 WuXingTable = ['金', '木', '水', '火', '土' ]
+wxZiIndexDic = {'金':0, '木':1, '水':2, '火':3, '土':4 }
+wxIndexDic={'j':0,'m':1,'s':2,'h':3,'t':4}
 
 TianGan_WuXingProp = [1, 1, 3, 3, 4,4, 0, 0, 2, 2]
 DiZhi_WuXingProp = [2, 4, 1, 1, 4,3, 3, 4, 0, 0, 4, 2]
@@ -199,15 +201,25 @@ def get_bazi_from_date(year,month,day,hour,minute):
     return analyse_result
 
 
+# score =[0,0,0,0,0]
+# for j in range(0,8):
+#    if j%2==0:
+#        wx_index = TianGan_WuXingProp[ComputeGanIndex(bazi[j])]
+#    else:
+#        wx_index = DiZhi_WuXingProp[ComputeZhiIndex(bazi[j])]
+#    score[wx_index]=score[wx_index]+1
+def choose_name_from_baze(xingWx,tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore,type,first='',sec=''):
+    mustWx = []
+    goodWx = []
+    for i in range(0,5):
+        if wuxingscore[i]<0.5:
+            goodWx.append(i)
+    if is_weak:
+        mustWx.append(wxZiIndexDic[minTong])
+    else:
+        mustWx.append(wxZiIndexDic[minYi])
 
-def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first='',sec=''):
-    score =[0,0,0,0,0]
-    for j in range(0,8):
-       if j%2==0:
-           wx_index = TianGan_WuXingProp[ComputeGanIndex(bazi[j])]
-       else:
-           wx_index = DiZhi_WuXingProp[ComputeZhiIndex(bazi[j])]
-       score[wx_index]=score[wx_index]+1
+    #
     for i in range(0,5):
         if score[i]==0:
             score[i]=-5
@@ -235,7 +247,6 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first
                     score[i]=score[i]-1
     name_score = []
     good_500 = []
-    wxIndexDic={'j':0,'m':1,'s':2,'h':3,'t':4}
     total_arr = []
     if type==1:
         total_arr = mand_arr
@@ -314,6 +325,33 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first
         if len(good_500)==300:
             break
     return  good_500
+
+def choose_from_wuxing(firstWuxing,secondWuxing,type):
+    good_rusult = []
+    total_arr = []
+    if type == 1:
+        total_arr = mand_arr
+    elif type == 2:
+        total_arr = womand_arr
+    elif type == 3 or type == 5 or type == 7:
+        total_arr = man_arr
+    elif type == 4 or type == 6 or type == 8:
+        total_arr = woman_arr
+    for name in total_arr:
+        wxNameFirst = wx_dict.get(name[0])
+        if wxNameFirst != None:
+            wxIndexFirst = wxIndexDic.get(wxNameFirst)
+        else:
+            continue
+        wxNameSecond = wx_dict.get(name[1])
+        if wxNameSecond != None:
+            wxIndexSecond = wxIndexDic.get(wxNameSecond)
+        else:
+            continue
+        if wxZiIndexDic[firstWuxing]==wxIndexFirst and wxZiIndexDic[secondWuxing]==wxIndexSecond and name[0] != name[1]:
+            good_rusult.append(name)
+    return random.sample(good_rusult, 500)
+
 
 def analyse_mingzi(xing,ming):
     mingzi = xing+ming
@@ -535,6 +573,16 @@ def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,xing,num,sex,first='',se
     elif sex=='2':
         type = 2
     names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first='',sec='')
+    names = cuputer_score(xing,names500)
+    return  get_result(num,names)
+
+def get_two_custom(xing,firstWx,secondWx,sex,num):
+    type = 1
+    if sex=='1':
+        type = 1
+    elif sex=='2':
+        type = 2
+    names500 = choose_from_wuxing(firstWx,secondWx,type)
     names = cuputer_score(xing,names500)
     return  get_result(num,names)
 

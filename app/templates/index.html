@@ -40,8 +40,8 @@
 				</div>
 				<div class="col-md-6">
 					<ul class="list-inline top-link link">
-						<li><a href="index.html"><i class="fa fa-home"></i> 首页</a></li>
-						<li><a href="contact.html"><i class="fa fa-comments"></i> 联系</a></li>
+						<li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+						<li><a href="#"><i class="fa fa-comments"></i> 联系</a></li>
 						<li><a href="#"><i class="fa fa-question-circle"></i> 问答</a></li>
 					</ul>
 				</div>
@@ -59,19 +59,19 @@
 		</div>
 		<div class="collapse navbar-collapse navbar-ex1-collapse">
 			<ul class="nav navbar-nav">
-				<li><a href="index.html">首页</a></li>
+				<li><a href="#">首页</a></li>
 				<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">账户 <i class="fa fa-arrow-circle-o-down"></i></a>
 					<div class="dropdown-menu">
 						<div class="dropdown-inner">
 							<ul class="list-unstyled">
-								<li><a href="archive.html">登录</a></li>
-								<li><a href="archive.html">注册</a></li>
+								<li><a href="#">登录</a></li>
+								<li><a href="#">注册</a></li>
 							</ul>
 						</div>
 					</div>
 				</li>
-				<li><a href="archive.html"><i class="fa fa-cubes"></i> 联系</a></li>
-				<li><a href="contact.html"><i class="fa fa-envelope"></i> 问答</a></li>
+				<li><a href="#"><i class="fa fa-cubes"></i> 联系</a></li>
+				<li><a href="#"><i class="fa fa-envelope"></i> 问答</a></li>
 			</ul>
 			<ul class="list-inline navbar-right top-social">
 				<li><a href="#"><i class="fa fa-pinterest"></i></a></li>
@@ -199,8 +199,8 @@
 									<input type="text"  style="width: 60%;" placeholder="名" id="mingzi" />
 								</div>
 								<div class="block">
-									<span><input type="text" placeholder="选择出生日期" value=""  name="date" id="birthday3" class="form-control"></span>
-									<span><input type="text" placeholder="选择出生时间" value=""  name="time" id="birthday3Time" class="form-control"></span>
+									<span><input type="text" placeholder="选择出生日期" value=""  name="date" id="birthdayanalyse" class="form-control"></span>
+									<span><input type="text" placeholder="选择出生时间" value=""  name="time" id="birthdayanalyseTime" class="form-control"></span>
 								</div>
 								<div class="block">
 									<button class="btn btn-primary" id="test" onclick="analyzemingzi()">分析测评</button>
@@ -219,25 +219,22 @@
 					<div class="widget wid-vid">
 						<div class="heading"><h4>自定义五行</h4></div>
 						<div class="box-content">
-							<div><input style="width: 45%;" placeholder="姓氏" type="text" id="xingcustom" /></div>
-								<div class="block">
-								<span><input type="text" placeholder="选择出生日期" value=""  name="date" id="birthdaycustom" class="form-control"></span>
-								<span><input type="text" placeholder="选择出生时间" value="" name="time" id="birthdaycustomTime" class="form-control"></span>
-								</div>
+							<div><input  placeholder="请输入姓氏" type="text" id="xingcustom" /></div>
+
 							<div class="block form-inline">
 							<select name="type" id="firstwuxing"  style="width: 30%;">
-								<option value="1">金</option>
-								<option value="2">木</option>
-								<option value="3">水</option>
-								<option value="4">火</option>
-								<option value="5">土</option>
+								<option value="金">金</option>
+								<option value="木">木</option>
+								<option value="水">水</option>
+								<option value="火">火</option>
+								<option value="土">土</option>
 							</select>
 							<select name="type" id="secondwuxing"  style="width: 30%;">
-								<option value="1">金</option>
-								<option value="2">木</option>
-								<option value="3">水</option>
-								<option value="4">火</option>
-								<option value="5">土</option>
+								<option value="金">金</option>
+								<option value="木">木</option>
+								<option value="水">水</option>
+								<option value="火">火</option>
+								<option value="土">土</option>
 							</select>
 							</div>
 							<div class="block">
@@ -248,14 +245,14 @@
 							</div>
 							<div class="block">
 								<div class="radio-inline ">
-								  <label><input type="radio" name="optradio" value=1 checked>男 孩 </label>
+								  <label><input type="radio" name="optradiocustom" value=1 checked>男 孩 </label>
 								</div>
 								<div class="radio-inline">
-								  <label><input type="radio" name="optradio" value=2>女 孩 </label>
+								  <label><input type="radio" name="optradiocustom" value=2>女 孩 </label>
 								</div>
 							</div>
 								<div class="block">
-									<button class="btn btn-primary" id="querybazi" onclick="querycustom()">查 询</button>
+									<button class="btn btn-primary" onclick="querycustom()">查 询</button>
 								</div>
 							</div>
 						</div>
@@ -272,7 +269,7 @@
 					<div class="col-sm-8 col-footer footer-1">
 						<div class="footer-heading"><h1><span style="color: #000;">鸣谢</span></h1></div>
 						<div class="content">
-							<p><strong>瑾将此网站献给即将出生的女儿（儿子）！</strong></p>
+							<p><strong>瑾将此网站献给即将出生的宝宝！</strong></p>
 							<p><strong>感谢妻子十月怀胎艰辛！</strong></p>
 							<p><strong>感谢父母的辛苦操劳！</strong></p>
 						</div>
@@ -338,40 +335,20 @@
 	  ,type: 'time'
 	});
 	laydate.render({
-	  elem: '#birthday1' //指定元素
+	  elem: '#birthdaycustom' //指定元素
 	});
 	laydate.render({
-	  elem: '#birthday1Time'
+	  elem: '#birthdaycustomTime'
 	  ,type: 'time'
 	});
 	laydate.render({
-	  elem: '#birthday2' //指定元素
-	});
-	laydate.render({
-	  elem: '#birthday3Time'
+	  elem: '#birthdayanalyseTime'
 	  ,type: 'time'
 	});
 	laydate.render({
-	  elem: '#birthday3' //指定元素
+	  elem: '#birthdayanalyse' //指定元素
 	});
 
-	function querybazi(){
-        date = document.getElementById("birthday1").value
-        time = document.getElementById("birthday1Time").value
-        $.post("{{ url_for('analyse_bazi') }}",
-			{
-                'date':date,'time':time,
-            },
-            function(data,status){
-				result = eval("("+data+")");
-				$('#bazi').html("八字："+result["shengchenbazi"]);
-			}
-		)
-	}
-
-	function querynongli(){
-        date = document.getElementById("birthday1").value
-	}
 
 
     function resolve_bazi(data){
@@ -398,7 +375,7 @@
 			shengchenHtml += '喜用神：'+tonglei+','+rigan_wx +'<br/>'
 		}
 		else{
-			shengchenHtml += '八字偏强<br/>'
+			shengchenHtml +=  '日干为'+rigan_wx+',八字偏旺<br/>'
 			shengchenHtml += '喜用神：'+yileilist[0]+','+yileilist[1]+','+yileilist[2]+',' +'<br/>'
 		}
 		$('#shengchen').html(shengchenHtml);
@@ -469,12 +446,35 @@
 				var itemHtml="";
 				listName = eval("("+data+")");
 				for(var i=0,len=listName.length;i<len;i++){
-				　　itemHtml+='<a href="#result" onclick="analyse(xing,this,date,time)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
+				　　itemHtml+='<a href="#result" onclick="analyse(xing,this)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
 				}
 				$('#result').html(itemHtml);
 			});
 		});
     }
+
+
+    function querycustom(){
+        xing = document.getElementById("xingcustom").value
+        sex = $("input[name='optradiocustom']:checked").val();
+        doublename = $('#doublenamecustom  option:selected').val()
+        firstWx = $('#firstwuxing  option:selected').val()
+        secondWx = $('#secondwuxing  option:selected').val()
+
+        $.post("{{ url_for('querycustom') }}",
+		{
+            'xing':xing,'sex':sex,'firstWx':firstWx,'secondWx':secondWx
+        },
+		function(data,status){
+			var itemHtml="";
+			listName = eval("("+data+")");
+			for(var i=0,len=listName.length;i<len;i++){
+			　　itemHtml+='<a href="#result" onclick="analyse(xing,this)" style="padding-left: 20px;padding-top: 10px;display:inline-block">'+xing+listName[i]+'</a>';
+			}
+			$('#result').html(itemHtml);
+		});
+    }
+
     function analyse(xing,obj){
     	mingzi = ""
     	quanming = obj.innerHTML
@@ -496,8 +496,8 @@
     function analyzemingzi(){
         xing = $("#xingshi").val()
         ming = $("#mingzi").val()
-        date = document.getElementById("birthday3").value
-        time = document.getElementById("birthday3Time").value
+        date = document.getElementById("birthdayanalyse").value
+        time = document.getElementById("birthdayanalyseTime").value
     	$.post("{{ url_for('analyse_mingzi') }}",
 			{
 				'xing':xing,'ming':ming

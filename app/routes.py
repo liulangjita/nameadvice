@@ -38,6 +38,17 @@ def query():
     ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,xing,50,sex)
     return  json.dumps(ret,ensure_ascii=False)
 
+@app.route('/querycustom',methods=['GET','POST'])
+def querycustom():
+    if len(models.wx_dict)==0:
+        models.init_data()
+    firstWx = request.values['firstWx']
+    secondWx = request.values['secondWx']
+    xing = request.values['xing']
+    sex = request.values['sex']
+    ret = models.get_two_custom(xing,firstWx,secondWx,sex,50)
+    return  json.dumps(ret,ensure_ascii=False)
+
 
 @app.route('/analyse_bazi',methods=['GET','POST'])
 def analyse_bazi():
