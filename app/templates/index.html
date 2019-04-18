@@ -419,7 +419,16 @@
 		wugeHtml += '人格：'+ren+'<br/>'
 		wugeHtml += '总格：'+zong+'<br/>'
 		wugeHtml += '三才分数：'+sancaiScore+'<br/>'
-		wugeHtml += '五格分数：'+wuge+'  <br/>'
+		wugecp = ''
+		if(wuge>2)
+			wugecp = '大吉'
+		else if(wuge==2)
+			wugecp = '吉'
+		else if(wuge==1)
+			wugecp = '佳'
+		else if(wuge==0)
+			wugecp = '良'
+		wugeHtml += '五格测评：'+wugecp+'  <br/>'
 
 		$('#wugeresult').html(wugeHtml);
     }
@@ -440,7 +449,7 @@
 
 			$.post("{{ url_for('query') }}",
 			{
-						'tonglei':tonglei,'rigan_wx':rigan_wx,'is_weak':is_weak,'minTong':minTong,'minYi':minYi,'bazi':bazi,'xing':xing,'sex':sex					},
+						'tonglei':tonglei,'rigan_wx':rigan_wx,'is_weak':is_weak,'minTong':minTong,'minYi':minYi,'wuxingscore':wuxingscore.join(),'xing':xing,'sex':sex					},
 				function(data,status){
 
 				var itemHtml="";
@@ -483,7 +492,7 @@
     	else
     		mingzi = quanming.substring(1)
     	$('#mingzi').val(mingzi)
-    	$('#xingshi').attr("value",xing)
+    	$('#xingshi').val(xing)
     	$.post("{{ url_for('analyse_mingzi') }}",
 			{
 				'xing':xing,'ming':mingzi

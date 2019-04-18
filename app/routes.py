@@ -32,10 +32,10 @@ def query():
     is_weak = request.values['is_weak']
     minTong = request.values['minTong']
     minYi = request.values['minYi']
-    bazi = request.values['bazi']
+    wuxingscore = request.values['wuxingscore']
     xing = request.values['xing']
     sex = request.values['sex']
-    ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,xing,50,sex)
+    ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore.split(','),xing,50,sex)
     return  json.dumps(ret,ensure_ascii=False)
 
 @app.route('/querycustom',methods=['GET','POST'])

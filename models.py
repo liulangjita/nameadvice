@@ -25,31 +25,31 @@ GenerationSourceTable = [4, 2, 0, 1,3]
 TianGan = '甲乙丙丁戊己庚辛壬癸'
 DiZhi = '子丑寅卯辰巳午未申酉戌亥'
 tian=0
-sancai_score={'mmm':10,'mmh':10,'mmt':10,'mmj':4,'mms':6,
-              'mhm':10,'mhh':8,'mht':10,'mhj':4,'mhs':0,
-              'mtm':0,'mth':8,'mtt':9,'mtj':6,'mts':0,
-              'mjm':0,'mjh':0,'mjt':4,'mjj':0,'mjs':0,
-              'msm':10,'msh':4,'mst':4,'msj':10,'mss':10,
-              'hmm':10,'hmh':10,'hmt':10,'hmj':4,'hms':8,
-              'hhm':10,'hhh':8,'hht':10,'hhj':0,'hhs':0,
-              'htm':6,'hth':10,'htt':10,'htj':10,'hts':6,
-              'hjm':0,'hjh':0,'hjt':5,'hjj':0,'hjs':0,
-              'hsm':4,'hsh':0,'hst':0,'hsj':0,'hss':0,
-              'tmm':8,'tmh':8,'tmt':4,'tmj':0,'tms':4,
-              'thm':10,'thh':10,'tht':10,'thj':6,'ths':0,
-              'ttm':8,'tth':10,'ttt':10,'ttj':10,'tts':4,
-              'tjm':4,'tjh':4,'tjt':10,'tjj':10,'tjs':10,
-              'tsm':4,'tsh':0,'tst':0,'tsj':5,'tss':0,
-              'jmm':4,'jmh':4,'jmt':4,'jmj':0,'jms':4,
-              'jhm':4,'jhh':5,'jht':5,'jhj':0,'jhs':0,
-              'jtm':8,'jth':10,'jtt':10,'jtj':10,'jts':6,
-              'jjm':0,'jjh':0,'jjt':10,'jjj':8,'jjs':8,
-              'jsm':10,'jsh':4,'jst':9,'jsj':10,'jss':8,
-              'smm':10,'smh':10,'smt':10,'smj':4,'sms':10,
-              'shm':8,'shh':0,'sht':4,'shj':0,'shs':0,
-              'stm':0,'sth':8,'stt':8,'stj':8,'sts':0,
-              'sjm':4,'sjh':4,'sjt':10,'sjj':8,'sjs':10,
-              'ssm':10,'ssh':0,'sst':0,'ssj':10,'sss':8}
+sancai_score={'mmm':10,'mmh':10,'mmt':10,'mmj':5,'mms':7,
+              'mhm':10,'mhh':8,'mht':10,'mhj':5,'mhs':4,
+              'mtm':4,'mth':8,'mtt':9,'mtj':7,'mts':4,
+              'mjm':4,'mjh':4,'mjt':5,'mjj':4,'mjs':4,
+              'msm':10,'msh':5,'mst':5,'msj':10,'mss':10,
+              'hmm':10,'hmh':10,'hmt':10,'hmj':5,'hms':8,
+              'hhm':10,'hhh':8,'hht':10,'hhj':4,'hhs':4,
+              'htm':7,'hth':10,'htt':10,'htj':10,'hts':7,
+              'hjm':4,'hjh':4,'hjt':6,'hjj':4,'hjs':4,
+              'hsm':5,'hsh':4,'hst':4,'hsj':4,'hss':4,
+              'tmm':8,'tmh':8,'tmt':5,'tmj':4,'tms':5,
+              'thm':10,'thh':10,'tht':10,'thj':7,'ths':4,
+              'ttm':8,'tth':10,'ttt':10,'ttj':10,'tts':5,
+              'tjm':5,'tjh':5,'tjt':10,'tjj':10,'tjs':10,
+              'tsm':5,'tsh':4,'tst':4,'tsj':6,'tss':4,
+              'jmm':5,'jmh':5,'jmt':5,'jmj':4,'jms':5,
+              'jhm':5,'jhh':6,'jht':6,'jhj':4,'jhs':4,
+              'jtm':8,'jth':10,'jtt':10,'jtj':10,'jts':7,
+              'jjm':4,'jjh':4,'jjt':10,'jjj':8,'jjs':8,
+              'jsm':10,'jsh':5,'jst':9,'jsj':10,'jss':8,
+              'smm':10,'smh':10,'smt':10,'smj':5,'sms':10,
+              'shm':8,'shh':4,'sht':5,'shj':4,'shs':4,
+              'stm':4,'sth':8,'stt':8,'stj':8,'sts':4,
+              'sjm':5,'sjh':5,'sjt':10,'sjj':8,'sjs':10,
+              'ssm':10,'ssh':4,'sst':4,'ssj':10,'sss':8}
 
 def ComputeGanIndex(gan):
      for i in range(0,10):
@@ -208,45 +208,25 @@ def get_bazi_from_date(year,month,day,hour,minute):
 #    else:
 #        wx_index = DiZhi_WuXingProp[ComputeZhiIndex(bazi[j])]
 #    score[wx_index]=score[wx_index]+1
-def choose_name_from_baze(xingWx,tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore,type,first='',sec=''):
+def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore,type,first='',sec=''):
     mustWx = []
     goodWx = []
     for i in range(0,5):
-        if wuxingscore[i]<0.5:
+        if float(wuxingscore[i])<1:
             goodWx.append(i)
     if is_weak:
         mustWx.append(wxZiIndexDic[minTong])
     else:
         mustWx.append(wxZiIndexDic[minYi])
+    if len(goodWx)<1:
+        if is_weak:
+            goodWx.append(wxZiIndexDic[minYi])
+        else:
+            goodWx.append(wxZiIndexDic[minTong])
+    goodWx.extend(mustWx)
+    goodWx = list(set(goodWx))
 
-    #
-    for i in range(0,5):
-        if score[i]==0:
-            score[i]=-5
-        elif score[i]==1:
-            score[i]=-1
-        elif score[i]==2:
-            score[i]=0
-        elif score[i]==3:
-            score[i]=2
-        else:
-            score[i]=3
-        if WuXingTable[i] == tonglei or WuXingTable[i]==rigan_wx:
-            if is_weak=='1':
-                score[i]=score[i]-3
-                if WuXingTable[i]==minTong:
-                    score[i]=score[i]-1
-                if WuXingTable[i]==rigan_wx:
-                    score[i]=score[i]-1
-        else:
-            if is_weak == '0':
-                score[i]=score[i]-3
-                if WuXingTable[i]==minYi:
-                    score[i]=score[i]-1
-                if WuXingTable[i]==rigan_wx:
-                    score[i]=score[i]-1
-    name_score = []
-    good_500 = []
+    good_ret = []
     total_arr = []
     if type==1:
         total_arr = mand_arr
@@ -258,73 +238,27 @@ def choose_name_from_baze(xingWx,tonglei,rigan_wx,is_weak,minTong,minYi,wuxingsc
         total_arr = woman_arr
     if type==1 or type == 2:
         for name in total_arr:
-            score_name=0
             wxName = wx_dict.get(name[0])
             if wxName != None:
-                wxIndex = wxIndexDic.get(wxName)
-                score_name=score_name+score[wxIndex]
+                wxIndexFirst = wxIndexDic.get(wxName)
+            else:
+                continue
             wxName = wx_dict.get(name[1])
             if wxName != None:
-                wxIndexOld = wxIndex
-                wxIndex = wxIndexDic.get(wxName)
-                if wxIndexOld==wxIndex:
-                    score_name=score_name+1
-                score_name=score_name+score[wxIndex]
-            if name[0]==name[1]:
-                score_name=score_name+1
-            tup_score_name = (name,score_name)
-            name_score.append(tup_score_name)
-    elif type == 3 or type==4:
-        for name in total_arr:
-            score_name=0
-            wxName = wx_dict.get(name[0])
-            if wxName != None:
-                wxIndex = wxIndexDic.get(wxName)
-                score_name=score_name+score[wxIndex]
-            tup_score_name = (name,score_name)
-            name_score.append(tup_score_name)
-    elif type == 5 or type == 6:
-        for name in total_arr:
-            score_name=0
-            wxName = wx_dict.get(name[0])
-            if wxName != None:
-                wxIndex = wxIndexDic.get(wxName)
-                score_name=score_name+score[wxIndex]
-            wxName = wx_dict.get(sec)
-            if wxName != None:
-                wxIndexOld = wxIndex
-                wxIndex = wxIndexDic.get(wxName)
-                if wxIndexOld==wxIndex:
-                    score_name=score_name+1
-                score_name=score_name+score[wxIndex]
-            if name[0]==sec:
-                score_name=score_name+1
-            tup_score_name = (name+sec,score_name)
-            name_score.append(tup_score_name)
-    elif type == 7 or type == 8:
-        for name in total_arr:
-            score_name=0
-            wxName = wx_dict.get(first)
-            if wxName != None:
-                wxIndex = wxIndexDic.get(wxName)
-                score_name=score_name+score[wxIndex]
-            wxName = wx_dict.get(name[0])
-            if wxName != None:
-                wxIndexOld = wxIndex
-                wxIndex = wxIndexDic.get(wxName)
-                if wxIndexOld==wxIndex:
-                    score_name=score_name+1
-                score_name=score_name+score[wxIndex]
-            if name[0]==first:
-                score_name=score_name+1
-            tup_score_name = (first+name,score_name)
-            name_score.append(tup_score_name)
-    tup_score_name_new = sorted(name_score, key=lambda x,:x[1])
-    for name_good in tup_score_name_new:
-        good_500.append(name_good[0])
-        if len(good_500)==300:
-            break
-    return  good_500
+                wxIndexSecond = wxIndexDic.get(wxName)
+            else:
+                continue
+            if len(goodWx)>1:
+                if wxIndexFirst != wxIndexSecond:
+                    if wxIndexFirst in goodWx and wxIndexSecond in goodWx:
+                        good_ret.append(name)
+            elif len(goodWx)==1:
+                if wxIndexFirst == wxIndexSecond and wxIndexFirst == goodWx[0]:
+                    good_ret.append(name)
+    if len(good_ret)>500:
+        return random.sample(good_ret, 500)
+    else:
+        return good_ret
 
 def choose_from_wuxing(firstWuxing,secondWuxing,type):
     good_rusult = []
@@ -350,7 +284,10 @@ def choose_from_wuxing(firstWuxing,secondWuxing,type):
             continue
         if wxZiIndexDic[firstWuxing]==wxIndexFirst and wxZiIndexDic[secondWuxing]==wxIndexSecond and name[0] != name[1]:
             good_rusult.append(name)
-    return random.sample(good_rusult, 500)
+    if len(good_rusult)>500:
+        return random.sample(good_rusult, 500)
+    else:
+        return good_rusult
 
 
 def analyse_mingzi(xing,ming):
@@ -566,13 +503,13 @@ def get_result(num,names):
 
     return  result
 
-def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,xing,num,sex,first='',sec=''):
+def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex,first='',sec=''):
     type = 1
     if sex=='1':
         type = 1
     elif sex=='2':
         type = 2
-    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,bazi,type,first='',sec='')
+    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,type,first='',sec='')
     names = cuputer_score(xing,names500)
     return  get_result(num,names)
 
