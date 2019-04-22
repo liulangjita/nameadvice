@@ -1,9 +1,11 @@
-
+#utf-8
 
 # Create your models here.
 import ctypes
 import time
 import random
+import BaziAlgorithm
+import CalendarChina
 
 
 wx_dict = {}
@@ -134,7 +136,7 @@ def init_data():
             womand_arr.append(line)
 
 def get_sizhu_from_date(year,month,day,hour,minute):
-    dll = ctypes.windll.LoadLibrary('data/valuatedll.dll')
+    dll = ctypes.windll.LoadLibrary('valuatedll.dll')
     sizhu_result = dll.GetSiZhuFromDate(year, month, day, hour, minute)
     return sizhu_result
 
@@ -154,25 +156,19 @@ def get_bazi_from_date(year,month,day,hour,minute):
     analyse_result['minTong']= minTong
     analyse_result['minYi']= minYi
     analyse_result['yileilist']= yileilist
-    dll = ctypes.windll.LoadLibrary('data/valuatedll.dll')
-    test_result = dll.GetScoreFromDate(year,month,day,hour,minute)
-
-    size = -1
-    test_result = ctypes.string_at(test_result, size)
-    tt = test_result.decode('utf-8')
-    strtemp=tt.split(',')
+    bazi = CalendarChina.GetSiZhu(year,month,day,hour,minute)
+    test_result = BaziAlgorithm.EvalBaziScore(bazi)
+    strtemp=test_result.split(',')
     wx_score_lei = []
     wx_score_lei_temp = []
-    for i in range(0,6):
-        if i<5:
-            wx_score_lei.append(float(strtemp[i]))
-            analyse_result['wuxingscore'][i]= float(strtemp[i])
-            wx_score_lei_temp.append(float(strtemp[i]))
-        elif i==5:
-            analyse_result['shengchenbazi'] = strtemp[i]
+    for i in range(0,5):
+        wx_score_lei.append(float(strtemp[i]))
+        analyse_result['wuxingscore'][i]= float(strtemp[i])
+        wx_score_lei_temp.append(float(strtemp[i]))
+    analyse_result['shengchenbazi'] = bazi
 
 
-    rigan_wx=TianGan_WuXingProp[ComputeGanIndex(strtemp[5][4])]
+    rigan_wx=TianGan_WuXingProp[ComputeGanIndex(bazi[4])]
     tonglei=GenerationSourceTable[rigan_wx]
     analyse_result['rigan'] = WuXingTable[rigan_wx]
     tonglei_score=wx_score_lei[rigan_wx]+wx_score_lei[tonglei]
@@ -255,6 +251,36 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore,typ
             elif len(goodWx)==1:
                 if wxIndexFirst == wxIndexSecond and wxIndexFirst == goodWx[0]:
                     good_ret.append(name)
+    elif type == 3 or type == 4:
+        for name in total_arr:
+            wxName = wx_dict.get(name[0])
+            if wxName != None:
+                wxIndexFirst = wxIndexDic.get(wxName)
+            else:
+                continue
+            if len(goodWx)>1 or len(goodWx)==1:
+                if wxIndexFirst in goodWx:
+                    good_ret.append(name)
+    elif type==5 or type == 6:
+        for name in total_arr:
+            wxName = wx_dict.get(name[0])
+            if wxName != None:
+                wxIndexFirst = wxIndexDic.get(wxName)
+            else:
+                continue
+            if len(goodWx)>1 or len(goodWx)==1:
+                if wxIndexFirst in goodWx:
+                    good_ret.append(name+sec)
+    elif type==7 or type == 8:
+        for name in total_arr:
+            wxName = wx_dict.get(name[0])
+            if wxName != None:
+                wxIndexFirst = wxIndexDic.get(wxName)
+            else:
+                continue
+            if len(goodWx)>1 or len(goodWx)==1:
+                if wxIndexFirst in goodWx:
+                    good_ret.append(first+name)
     if len(good_ret)>500:
         return random.sample(good_ret, 500)
     else:
@@ -267,23 +293,32 @@ def choose_from_wuxing(firstWuxing,secondWuxing,type):
         total_arr = mand_arr
     elif type == 2:
         total_arr = womand_arr
-    elif type == 3 or type == 5 or type == 7:
+    elif type == 3:
         total_arr = man_arr
-    elif type == 4 or type == 6 or type == 8:
+    elif type == 4:
         total_arr = woman_arr
     for name in total_arr:
-        wxNameFirst = wx_dict.get(name[0])
-        if wxNameFirst != None:
-            wxIndexFirst = wxIndexDic.get(wxNameFirst)
+        if type == 3 or type == 4:
+            wxNameFirst = wx_dict.get(name[0])
+            if wxNameFirst != None:
+                wxIndexFirst = wxIndexDic.get(wxNameFirst)
+            else:
+                continue
+            if wxZiIndexDic[firstWuxing]==wxIndexFirst:
+                good_rusult.append(name)
         else:
-            continue
-        wxNameSecond = wx_dict.get(name[1])
-        if wxNameSecond != None:
-            wxIndexSecond = wxIndexDic.get(wxNameSecond)
-        else:
-            continue
-        if wxZiIndexDic[firstWuxing]==wxIndexFirst and wxZiIndexDic[secondWuxing]==wxIndexSecond and name[0] != name[1]:
-            good_rusult.append(name)
+            wxNameFirst = wx_dict.get(name[0])
+            if wxNameFirst != None:
+                wxIndexFirst = wxIndexDic.get(wxNameFirst)
+            else:
+                continue
+            wxNameSecond = wx_dict.get(name[1])
+            if wxNameSecond != None:
+                wxIndexSecond = wxIndexDic.get(wxNameSecond)
+            else:
+                continue
+            if wxZiIndexDic[firstWuxing]==wxIndexFirst and wxZiIndexDic[secondWuxing]==wxIndexSecond and name[0] != name[1]:
+                good_rusult.append(name)
     if len(good_rusult)>500:
         return random.sample(good_rusult, 500)
     else:
@@ -514,7 +549,6 @@ def get_two(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex,first=''
     return  get_result(num,names)
 
 def get_two_custom(xing,firstWx,secondWx,sex,num):
-    type = 1
     if sex=='1':
         type = 1
     elif sex=='2':
@@ -523,41 +557,44 @@ def get_two_custom(xing,firstWx,secondWx,sex,num):
     names = cuputer_score(xing,names500)
     return  get_result(num,names)
 
-def get_one(birthdayStr,xing,sex,num):
-    if sex==1:
+def get_one_custom(xing,firstWx,sex,num):
+    if sex=='1':
         type = 3
-    elif sex==2:
+    elif sex=='2':
         type = 4
-    birthday=time.strptime(birthdayStr,'%Y-%m-%d %H:%M');
-    get_bazi_from_date(birthday.tm_year,birthday.tm_mon,birthday.tm_mday,birthday.tm_hour,birthday.tm_min)
-    names = choose_name_from_baze(type,xing)
-    names = cuputer_score(xing)
-    return    get_result(num,names)
+    names500 = choose_from_wuxing(firstWx,'',type)
+    names = cuputer_score(xing,names500)
+    return  get_result(num,names)
 
-def get_first(birthdayStr,xing,sec,sex,num):
-    if sex==1:
+def get_one(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex):
+    if sex=='1':
+        type = 3
+    elif sex=='2':
+        type = 4
+    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,type)
+    names = cuputer_score(xing,names500)
+    return  get_result(num,names)
+
+def get_first(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex,sec=''):
+    if sex=='1':
         type = 5
-    elif sex==2:
+    elif sex=='2':
         type = 6
-    birthday=time.strptime(birthdayStr,'%Y-%m-%d %H:%M');
-    get_bazi_from_date(birthday.tm_year,birthday.tm_mon,birthday.tm_mday,birthday.tm_hour,birthday.tm_min)
-    names = choose_name_from_baze(type,xing,'',sec)
-    names = cuputer_score(xing)
-    return    get_result(num,names)
+    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,type,first='',sec=sec)
+    names = cuputer_score(xing,names500)
+    return  get_result(num,names)
 
 
-def get_sec(birthdayStr,xing,first,sex,num):
-    if sex==1:
+def get_sec(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex,first=''):
+    if sex=='1':
         type = 7
-    if sex==2:
+    if sex=='2':
         type = 8
-    birthday=time.strptime(birthdayStr,'%Y-%m-%d %H:%M');
-    get_bazi_from_date(birthday.tm_year,birthday.tm_mon,birthday.tm_mday,birthday.tm_hour,birthday.tm_min)
-    names = choose_name_from_baze(type,xing,first,'')
-    names = cuputer_score(xing)
-    return    get_result(num,names)
+    names500 = choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,type,first=first,sec='')
+    names = cuputer_score(xing,names500)
+    return  get_result(num,names)
 
 if __name__ == "__main__":
     init_data()
-    names = get_one('1988-5-5 17:58','闫',2,50 )
+    names = get_two('1988-5-5 17:58','闫',2,50 )
     print(names)

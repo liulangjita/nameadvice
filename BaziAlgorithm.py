@@ -200,7 +200,7 @@ def EvalBaziScore(bazi):
             if TianGan_WuXingProp[index] == wuXing:
                 value1 = value1 + TianGan_Strength[monthIndex][index]
             i = i + 2
-        i = 0
+        i = 1
         while i < 8:
             zhi = bazi[i]
             for j in range(0,len(DiZhi_Strength)):

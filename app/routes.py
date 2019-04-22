@@ -8,19 +8,7 @@ import time
 @app.route('/')
 @app.route('/index')
 def index():
-    user = {'username': 'duke'}
-    posts = [
-        {
-            'author': {'username': '刘'},
-            'body': '这是模板模块中的循环例子～1'
-
-        },
-        {
-            'author': {'username': '忠强'},
-            'body': '这是模板模块中的循环例子～2'
-        }
-    ]
-    return render_template('index.html', title='我的', user=user, posts=posts)
+    return render_template('index.html', title='我的')
 
 
 @app.route('/query',methods=['GET','POST'])
@@ -35,7 +23,18 @@ def query():
     wuxingscore = request.values['wuxingscore']
     xing = request.values['xing']
     sex = request.values['sex']
-    ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore.split(','),xing,50,sex)
+    doublename = request.values['doublename']
+    firstname = request.values['firstname']
+    secname = request.values['secname']
+    if doublename == '1':
+        ret = models.get_one(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore.split(','),xing,50,sex)
+    else:
+        if len(firstname) == 1:
+            ret = models.get_sec(tonglei, rigan_wx, is_weak, minTong, minYi, wuxingscore.split(','), xing, 50, sex,first=firstname)
+        elif len(secname) == 1:
+            ret = models.get_first(tonglei, rigan_wx, is_weak, minTong, minYi, wuxingscore.split(','), xing, 50, sex,sec=secname)
+        else:
+            ret = models.get_two(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore.split(','),xing,50,sex)
     return  json.dumps(ret,ensure_ascii=False)
 
 @app.route('/querycustom',methods=['GET','POST'])
@@ -46,7 +45,11 @@ def querycustom():
     secondWx = request.values['secondWx']
     xing = request.values['xing']
     sex = request.values['sex']
-    ret = models.get_two_custom(xing,firstWx,secondWx,sex,50)
+    doublename = request.values['doublename']
+    if doublename == '1':
+        ret = models.get_one_custom(xing,firstWx,sex,50)
+    else:
+        ret = models.get_two_custom(xing,firstWx,secondWx,sex,50)
     return  json.dumps(ret,ensure_ascii=False)
 
 

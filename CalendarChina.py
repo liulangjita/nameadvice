@@ -9,13 +9,20 @@ def StringToDatetime(str):
     timeDate = time.strptime(str,'%Y-%m-%d %H:%M')
     return timeDate
 
+def GetSiZhu(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
+    nGanZhi = GetnGanZhi(nQiGuaYear, nQiGuaMonth, nQiGuaDay, nQiGuaHour, nQiGuaMinute)
+    yGanZhi = GetyGanZhi(nQiGuaYear, nQiGuaMonth, nQiGuaDay, nQiGuaHour, nQiGuaMinute, nGanZhi[0])
+    rGanZhi = GetrGanZhi(nQiGuaYear, nQiGuaMonth, nQiGuaDay, nQiGuaHour, nQiGuaMinute)
+    sGanZhi = GetsGanZhi(nQiGuaHour, rGanZhi[0])
+    return nGanZhi[0]+nGanZhi[1]+yGanZhi[0]+yGanZhi[1]+rGanZhi[0]+rGanZhi[1]+sGanZhi[0]+sGanZhi[1]
+
 def GetnGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
     year = nQiGuaYear
     if nQiGuaMonth == 1:
         year -= 1
     elif nQiGuaMonth == 2:
         lichun = StringToDatetime(JieQi[nQiGuaYear - 1900])
-        birthday2 = nQiGuaYear + '-' + nQiGuaMonth + '-' + nQiGuaDay + ' ' + nQiGuaHour + ':' + nQiGuaMinute
+        birthday2 = str(nQiGuaYear) + '-' + str(nQiGuaMonth) + '-' + str(nQiGuaDay) + ' ' + str(nQiGuaHour) + ':' + str(nQiGuaMinute)
         birthday1 = StringToDatetime(birthday2)
         if birthday1 < lichun:
             year = year-1
@@ -31,10 +38,26 @@ def GetnGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
     nDiZhi = DiZhi[year2 - 4]
     return (nTianGan,nDiZhi)
 
+def GetYueGan(nTianGanID,JieQiMonth):
+    firstYGan = 0
+    if nTianGanID%5==0:
+        firstYGan = 2
+    elif nTianGanID%5==1:
+        firstYGan = 4
+    elif nTianGanID%5==2:
+        firstYGan = 6
+    elif nTianGanID%5==3:
+        firstYGan = 8
+    elif nTianGanID%5==4:
+        firstYGan = 0
+    yTianGanID = (firstYGan + JieQiMonth - 1) % 10
+    yTianGan = TianGan[yTianGanID]
+    return yTianGan
+
 def GetyGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,nTianGan):
     sJieQiName1 = ""
     sJieQiName2 = ""
-    birthday2 = nQiGuaYear + '-' + nQiGuaMonth + '-' + nQiGuaDay + ' ' + nQiGuaHour + ':' + nQiGuaMinute
+    birthday2 = str(nQiGuaYear) + '-' + str(nQiGuaMonth) + '-' + str(nQiGuaDay) + ' ' + str(nQiGuaHour) + ':' + str(nQiGuaMinute)
     date = StringToDatetime(birthday2)
     i = 1786
     while i > -1:
@@ -44,6 +67,7 @@ def GetyGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,nTianGan
         else:
             year = int(JieQi[i][4:8])
         if year-nQiGuaYear>1 or nQiGuaYear-year>1:
+            i -= 1
             continue
         if (i + 1) % 12 > 8:
             PrevJQYear = JieQi[i + 1][5:9]
@@ -66,8 +90,8 @@ def GetyGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,nTianGan
             NextJQMonth = JieQi[i][0:1]
             NextJQDay = JieQi[i][2:3]
 
-        NextJQHour = JieQi[i][len(JieQi[i]) - 5, len(JieQi[i]) - 5 + 2]
-        NextJQMinute = JieQi[i][len(JieQi[i]) - 2, len(JieQi[i]) - 2 + 2]
+        NextJQHour = JieQi[i][len(JieQi[i]) - 5: len(JieQi[i]) - 5 + 2]
+        NextJQMinute = JieQi[i][len(JieQi[i]) - 2: len(JieQi[i]) - 2 + 2]
         NextJieQi = NextJQYear + "-" + NextJQMonth + "-" + NextJQDay + " " + NextJQHour + ":" + NextJQMinute
 
         date2 = StringToDatetime(NextJieQi)
@@ -160,8 +184,8 @@ def GetyGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,nTianGan
 
 def GetrGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
     if nQiGuaYear>=1970:
-        year_start = StringToDatetime(nQiGuaYear + "-1-1 0:0")
-        today = StringToDatetime(nQiGuaYear + '-' + nQiGuaMonth + '-' + nQiGuaDay + ' ' + nQiGuaHour + ':' + nQiGuaMinute)
+        year_start = StringToDatetime(str(nQiGuaYear) + "-1-1 0:0")
+        today = StringToDatetime(str(nQiGuaYear) + '-' + str(nQiGuaMonth) + '-' + str(nQiGuaDay) + ' ' + str(nQiGuaHour) + ':' + str(nQiGuaMinute))
         start_sec = time.mktime(year_start)
         today_sec = time.mktime(today)
         gapdays = int((today_sec - start_sec)/(24*60*60))+1
@@ -183,7 +207,7 @@ def GetrGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
         rDiZhi = DiZhi[index - 1]
     return (rTianGan,rDiZhi)
 
-def GetShiGan(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,rTianGanID):
+def GetShiGan(nQiGuaHour,rTianGanID):
     if nQiGuaHour==23 or nQiGuaHour==0:
         rTianGanID = 0 + rTianGanID
     elif nQiGuaHour==1 or nQiGuaHour==2:
@@ -213,24 +237,44 @@ def GetShiGan(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute,rTianGanI
     sTianGan = TianGan[rTianGanID]
     return sTianGan
 
-def GetsGanZhi(nQiGuaYear,nQiGuaMonth,nQiGuaDay,nQiGuaHour,nQiGuaMinute):
-    pass
+def GetsGanZhi(nQiGuaHour,rTianGan):
+    if rTianGan == "甲" or rTianGan == "己":
+        rTianGanID = 0
+    elif rTianGan == "乙" or rTianGan == "庚":
+        rTianGanID = 2
+    elif rTianGan == "丙" or rTianGan == "辛":
+        rTianGanID = 4
+    elif rTianGan == "丁" or rTianGan == "壬":
+        rTianGanID = 6
+    else:
+        rTianGanID = 8
+    sTianGan =GetShiGan(nQiGuaHour,rTianGanID)
+    if nQiGuaHour == 23 or nQiGuaHour == 0:
+        sDiZhi = DiZhi[0]
+    if nQiGuaHour == 1 or nQiGuaHour == 2:
+        sDiZhi = DiZhi[1]
+    if nQiGuaHour == 3 or nQiGuaHour == 4:
+        sDiZhi = DiZhi[2]
+    if nQiGuaHour == 5 or nQiGuaHour == 6:
+        sDiZhi = DiZhi[3]
+    if nQiGuaHour == 7 or nQiGuaHour == 8:
+        sDiZhi = DiZhi[4]
+    if nQiGuaHour == 9 or nQiGuaHour == 10:
+        sDiZhi = DiZhi[5]
+    if nQiGuaHour == 11 or nQiGuaHour == 12:
+        sDiZhi = DiZhi[6]
+    if nQiGuaHour == 13 or nQiGuaHour == 14:
+        sDiZhi = DiZhi[7]
+    if nQiGuaHour == 15 or nQiGuaHour == 16:
+        sDiZhi = DiZhi[8]
+    if nQiGuaHour == 17 or nQiGuaHour == 18:
+        sDiZhi = DiZhi[9]
+    if nQiGuaHour == 19 or nQiGuaHour == 20:
+        sDiZhi = DiZhi[10]
+    if nQiGuaHour == 21 or nQiGuaHour == 22:
+        sDiZhi = DiZhi[11]
+    return (sTianGan,sDiZhi)
 
-def GetYueGan(nTianGanID,JieQiMonth):
-    firstYGan = 0
-    if nTianGanID%5==0:
-        firstYGan = 2
-    elif nTianGanID%5==1:
-        firstYGan = 4
-    elif nTianGanID%5==2:
-        firstYGan = 6
-    elif nTianGanID%5==3:
-        firstYGan = 8
-    elif nTianGanID%5==4:
-        firstYGan = 0
-    yTianGanID = (firstYGan + JieQiMonth - 1) % 10
-    yTianGan = TianGan[yTianGanID]
-    return yTianGan
 
 def DateNum(year,month):
     if month==2:
