@@ -210,12 +210,12 @@ def choose_name_from_baze(tonglei,rigan_wx,is_weak,minTong,minYi,wuxingscore,typ
     for i in range(0,5):
         if float(wuxingscore[i])<1:
             goodWx.append(i)
-    if is_weak:
+    if is_weak=='1':
         mustWx.append(wxZiIndexDic[minTong])
     else:
         mustWx.append(wxZiIndexDic[minYi])
     if len(goodWx)<1:
-        if is_weak:
+        if is_weak=='1':
             goodWx.append(wxZiIndexDic[minYi])
         else:
             goodWx.append(wxZiIndexDic[minTong])
@@ -596,5 +596,5 @@ def get_sec(tonglei,rigan_wx,is_weak,minTong,minYi,wxscore,xing,num,sex,first=''
 
 if __name__ == "__main__":
     init_data()
-    names = get_two('1988-5-5 17:58','闫',2,50 )
+    names = get_two('2019-5-4 15:00','',2,50 )
     print(names)
