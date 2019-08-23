@@ -2,11 +2,8 @@
 
 # Create your models here.
 import ctypes
-import time
 import random
-import BaziAlgorithm
-import CalendarChina
-
+from app import BaziAlgorithm, CalendarChina
 
 wx_dict = {}
 bh_dict = {}
@@ -156,7 +153,7 @@ def get_bazi_from_date(year,month,day,hour,minute):
     analyse_result['minTong']= minTong
     analyse_result['minYi']= minYi
     analyse_result['yileilist']= yileilist
-    bazi = CalendarChina.GetSiZhu(year,month,day,hour,minute)
+    bazi = CalendarChina.GetSiZhu(year, month, day, hour, minute)
     test_result = BaziAlgorithm.EvalBaziScore(bazi)
     strtemp=test_result.split(',')
     wx_score_lei = []
