@@ -1,2 +1,3 @@
-FROM tiangolo/uwsgi-nginx-flask:python3.6
+FROM tiangolo/meinheld-gunicorn:python3.7
+RUN pip install flask
 COPY ./app /app
