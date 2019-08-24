@@ -1,4 +1,5 @@
-from app import app, models
+from  app import app
+from app import models
 from flask import render_template, request
 import json
 import time
@@ -25,7 +26,7 @@ def checkMobile(request):
         return True
     return False
 
-@app.route('/query',methods=['GET','POST'])
+@app.route('/query', methods=['GET', 'POST'])
 def query():
     if len(models.wx_dict)==0:
         models.init_data()
@@ -51,7 +52,7 @@ def query():
             ret = models.get_two(tonglei, rigan_wx, is_weak, minTong, minYi, wuxingscore.split(','), xing, 50, sex)
     return  json.dumps(ret,ensure_ascii=False)
 
-@app.route('/querycustom',methods=['GET','POST'])
+@app.route('/querycustom', methods=['GET', 'POST'])
 def querycustom():
     if len(models.wx_dict)==0:
         models.init_data()
@@ -67,7 +68,7 @@ def querycustom():
     return  json.dumps(ret,ensure_ascii=False)
 
 
-@app.route('/analyse_bazi',methods=['GET','POST'])
+@app.route('/analyse_bazi', methods=['GET', 'POST'])
 def analyse_bazi():
     if len(models.wx_dict)==0:
         models.init_data()
@@ -79,7 +80,7 @@ def analyse_bazi():
     return  json.dumps(ret,ensure_ascii=False)
 
 
-@app.route('/analyse_mingzi',methods=['GET','POST'])
+@app.route('/analyse_mingzi', methods=['GET', 'POST'])
 def analyse_mingzi():
     if len(models.wx_dict)==0:
         models.init_data()
